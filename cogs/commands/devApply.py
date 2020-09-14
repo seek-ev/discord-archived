@@ -1,22 +1,24 @@
 from discord.ext import commands
-from discord.ext.commands import command, Context
+from modules.permissions import is_bot_owner
 
 applicationExample = 'Example application:' \
-                     '```[discord, dev-api, website] # what do you want to help with \n'\
-    'username: SerekKiri # github username\n' \
-    'reason: I love this project! # reason why do you want to join us (nullable)```'\
-    '**Please use ``` wrapped around application**'
+                     '```[discord, dev-api, website] # what do you want to help with \n' \
+                     'username: SerekKiri # github username\n' \
+                     'reason: I love this project! # reason why do you want to join us (nullable)```' \
+                     '**Please use ``` wrapped around application**'
 
 
 class DevApplyCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @command(name='dev', rest_is_raw=True)
-    async def dev(self, ctx: Context, *, arg):
-        if len(arg) <= 0:
-            await ctx.send(applicationExample)
-            return
+    @commands.group(name='dev', invoke_without_command=True)
+    async def devcmd(self, ctx):
+        await ctx.send(applicationExample)
+        return
+
+    @devcmd.command(name='apply')
+    async def dev_apply(self, ctx, *, arg):
         arg = arg.replace('`', '')
         lines = []
         for line in arg.splitlines():
@@ -34,6 +36,11 @@ class DevApplyCommands(commands.Cog):
         }
         print(application)
         return
+
+    # @command(name="dev accept")
+    # @is_bot_owner()
+    # async def devAccept(self, ctx: Context):
+    #     return
 
 
 def setup(bot):

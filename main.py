@@ -1,22 +1,24 @@
 from discord.ext import commands
 from modules import config
-from modules.database import initFirebase, setVal, getVal
+from modules.database import initFirebase
 
-cogs = ['commands.devApply']
+cogs = ['cogs.commands.devApply',
+        'cogs.events.CommandEvents']
 
-bot = commands.Bot(owner_ids=config.getOwners(), case_insensitive=1, command_prefix="!")
+client = commands.Bot(owner_ids=config.getOwners(), case_insensitive=1, command_prefix="!")
 
 
-@bot.event
+@client.event
 async def on_ready():
     print('Logged in as')
-    print(bot.user.name)
-    print(bot.user.id)
+    print(client.user.name)
+    print(client.user.id)
     print('------')
     for cog in cogs:
-        bot.load_extension(cog)
+        client.load_extension(cog)
     return
 
 
 if __name__ == '__main__':
-    bot.run(config.getToken(), bot=True, reconnect=True)
+    initFirebase()
+    client.run(config.getToken(), bot=True, reconnect=True)
