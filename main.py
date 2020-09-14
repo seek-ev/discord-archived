@@ -1,5 +1,6 @@
 from discord.ext import commands
 from modules import config
+from modules.database import initFirebase, setVal, getVal
 
 cogs = ['commands.devApply']
 
