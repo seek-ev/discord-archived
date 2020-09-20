@@ -1,7 +1,7 @@
 from discord.ext import commands
 from discord.ext.commands import Context
 
-from modules.database import getVal, setVal
+from modules.database import getVal, setVal, checkExist
 from modules.permissions import is_bot_owner
 
 # applicationExample = 'Example application:' \
@@ -24,7 +24,7 @@ class DevApplyCommands(commands.Cog):
         return
 
     @devcmd.command(name='apply')
-    async def dev_apply(self, ctx, *, application):
+    async def dev_apply(self, ctx: Context, *, application):
         application = application.replace('`', '')
         lines = []
         for line in application.splitlines():
@@ -42,7 +42,10 @@ class DevApplyCommands(commands.Cog):
             'username': username,
             'reason': lines[2].replace('reason: ', '', 1).split('#')[0],
         }
-        setVal('/applications/developer', '{0}'.format(userid), application)
+        if not checkExist('/applications/developer', '{0}'.format(userid)):
+            setVal('/applications/developer', '{0}'.format(userid), application)
+        else:
+            await ctx.send('Your application is reviewing, please wait.')
         return
 
     @devcmd.command(name="accept")
