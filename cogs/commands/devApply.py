@@ -1,7 +1,7 @@
 from discord.ext import commands
 from discord.ext.commands import Context
 
-from modules.database import getVal
+from modules.database import getVal, setVal
 from modules.permissions import is_bot_owner
 
 # applicationExample = 'Example application:' \
@@ -35,12 +35,14 @@ class DevApplyCommands(commands.Cog):
             v = v.split('#')[0]
             v = v.replace('[', '').replace(']', '').replace(' ', '', 1)
             wherehelp.append(v)
+        username = lines[1].replace('username: ', '', 1).split('#')[0],
+        userid = ctx.author.id
         application = {
             'wherehelp': wherehelp,
-            'username': lines[1].replace('username: ', '', 1).split('#')[0],
+            'username': username,
             'reason': lines[2].replace('reason: ', '', 1).split('#')[0],
         }
-        print(application)
+        setVal('/applications/developer', '{0}'.format(userid), application)
         return
 
     @devcmd.command(name="accept")
