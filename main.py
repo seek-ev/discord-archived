@@ -1,9 +1,11 @@
 from discord.ext import commands
+
 from modules import config
 from modules.database import initFirebase
 
 cogs = ['cogs.commands.devApply',
-        'cogs.events.CommandEvents']
+        'cogs.events.CommandEvents',
+        'cogs.events.ReactionEvent']
 
 client = commands.Bot(owner_ids=config.getOwners(), case_insensitive=1, command_prefix="!")
 
@@ -17,7 +19,6 @@ async def on_ready():
     for cog in cogs:
         client.load_extension(cog)
     return
-
 
 if __name__ == '__main__':
     initFirebase()
