@@ -24,3 +24,10 @@ def setVal(path, child, data):
     ref = db.reference(path)
     ch = ref.child(child)
     ch.set(data)
+
+
+def checkExist(path='/', child=''):
+    check = getVal(path, child)
+    if check is not None:
+        return True
+    return False
