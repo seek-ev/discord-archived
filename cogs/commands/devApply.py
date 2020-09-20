@@ -24,10 +24,10 @@ class DevApplyCommands(commands.Cog):
         return
 
     @devcmd.command(name='apply')
-    async def dev_apply(self, ctx, *, arg):
-        arg = arg.replace('`', '')
+    async def dev_apply(self, ctx, *, application):
+        application = application.replace('`', '')
         lines = []
-        for line in arg.splitlines():
+        for line in application.splitlines():
             if line != ' ' and line != '':
                 lines.append(line)
         wherehelp = []
@@ -45,8 +45,8 @@ class DevApplyCommands(commands.Cog):
 
     @devcmd.command(name="accept")
     @is_bot_owner()
-    async def devAccept(self, ctx: Context, arg1):
-        userid = int(arg1.replace('<@!', '').replace('>', ''))
+    async def devAccept(self, ctx: Context, userMentionOrId):
+        userid = int(userMentionOrId.replace('<@!', '').replace('>', ''))
         guild = ctx.guild
         role = guild.get_role(devRoleId)
         user = guild.get_member(userid)
