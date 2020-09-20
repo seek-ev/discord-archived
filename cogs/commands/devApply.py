@@ -1,4 +1,5 @@
 from discord.ext import commands
+from discord.ext.commands import Context
 
 from modules.database import getVal
 from modules.permissions import is_bot_owner
@@ -10,6 +11,7 @@ from modules.permissions import is_bot_owner
 #                      '**Please use ``` wrapped around application**'
 
 applicationExample = getVal('/config/application', 'applicationExample')
+devRoleId = int(getVal('/config/roles', 'developer'))
 
 
 class DevApplyCommands(commands.Cog):
@@ -41,10 +43,16 @@ class DevApplyCommands(commands.Cog):
         print(application)
         return
 
-    # @command(name="dev accept")
-    # @is_bot_owner()
-    # async def devAccept(self, ctx: Context):
-    #     return
+    @devcmd.command(name="accept")
+    @is_bot_owner()
+    async def devAccept(self, ctx: Context, arg1):
+        userid = int(arg1.replace('<@!', '').replace('>', ''))
+        guild = ctx.guild
+        role = guild.get_role(devRoleId)
+        user = guild.get_member(userid)
+        if role and user is not None:
+            await user.add_roles(role)
+        return
 
 
 def setup(bot):
