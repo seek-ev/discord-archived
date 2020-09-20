@@ -1,11 +1,15 @@
 from discord.ext import commands
+
+from modules.database import getVal
 from modules.permissions import is_bot_owner
 
-applicationExample = 'Example application:' \
-                     '```[discord, dev-api, website] # what do you want to help with \n' \
-                     'username: SerekKiri # github username\n' \
-                     'reason: I love this project! # reason why do you want to join us (nullable)```' \
-                     '**Please use ``` wrapped around application**'
+# applicationExample = 'Example application:' \
+#                      '```[discord, dev-api, website] # what do you want to help with \n' \
+#                      'username: SerekKiri # github username\n' \
+#                      'reason: I love this project! # reason why do you want to join us (nullable)```' \
+#                      '**Please use ``` wrapped around application**'
+
+applicationExample = getVal('/config/application', 'applicationExample')
 
 
 class DevApplyCommands(commands.Cog):
