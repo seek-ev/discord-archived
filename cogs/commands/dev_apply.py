@@ -1,3 +1,7 @@
+import json
+import io
+
+import discord
 from discord.ext import commands
 from discord.ext.commands import Context
 
@@ -25,6 +29,10 @@ class DevApplyCommands(commands.Cog):
 
     @dev_cmd.command(name='apply')
     async def dev_apply(self, ctx: Context, *, application):
+        userid = ctx.author.id
+        if checkExist('/applications/developer', '{0}'.format(userid)):
+            await ctx.send('Your application is reviewing, please wait.')
+            return
         application = application.replace('`', '')
         lines = []
         for line in application.splitlines():
@@ -35,8 +43,7 @@ class DevApplyCommands(commands.Cog):
             v = v.split('#')[0]
             v = v.replace('[', '').replace(']', '').replace(' ', '', 1)
             wherehelp.append(v)
-        username = lines[1].replace('username: ', '', 1).split('#')[0],
-        userid = ctx.author.id
+        username = lines[1].replace('username: ', '', 1).split('#')[0].strip()
         application = {
             'wherehelp': wherehelp,
             'username': username,
@@ -44,8 +51,6 @@ class DevApplyCommands(commands.Cog):
         }
         if not checkExist('/applications/developer', '{0}'.format(userid)):
             setVal('/applications/developer', '{0}'.format(userid), application)
-        else:
-            await ctx.send('Your application is reviewing, please wait.')
         return
 
     @dev_cmd.command(name="accept")
@@ -57,6 +62,20 @@ class DevApplyCommands(commands.Cog):
         user = guild.get_member(userid)
         if role and user is not None:
             await user.add_roles(role)
+        return
+
+    @dev_cmd.command(name="list")
+    @is_bot_owner()
+    async def dev_list(self, ctx: Context):
+        applications = getVal('/applications/developer')
+        message = json.dumps(applications, indent=1)
+        if not len(message) > 1950:
+            message = '```json\n' + json.dumps(applications, indent=1) + '```'
+            await ctx.send(message)
+        else:
+            f_msg = io.StringIO(message)
+            f: discord.File = discord.File(fp=f_msg, filename='applications.json')
+            await ctx.send(file=f)
         return
 
 

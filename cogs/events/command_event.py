@@ -1,14 +1,16 @@
+import discord
 from discord.ext import commands
 
 
-class ReactionEvent(commands.Cog):
+class CommandEvents(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     @commands.Cog.listener()
-    async def on_raw_reaction_add(self, payload):
-        pass
+    async def on_command_error(self, ctx, error: discord.ext.commands.CommandError):
+        print(ctx.command.name + " was invoked incorrectly.")
+        print(error)
 
 
 def setup(bot):
-    bot.add_cog(ReactionEvent(bot))
+    bot.add_cog(CommandEvents(bot))
