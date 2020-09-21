@@ -16,5 +16,5 @@ venv/
 .vscode/
 
 sdk.json
-
+.pytest_cache
 __pycache__/
