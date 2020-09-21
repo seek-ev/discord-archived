@@ -3,9 +3,9 @@ from discord.ext import commands
 from modules import config
 from modules.database import initFirebase
 
-cogs = ['cogs.commands.devApply',
-        'cogs.events.CommandEvents',
-        'cogs.events.ReactionEvent']
+cogs = ['cogs.commands.dev_apply',
+        'cogs.events.command_event',
+        'cogs.events.reaction_event']
 
 client = commands.Bot(owner_ids=config.getOwners(), case_insensitive=1, command_prefix="!")
 

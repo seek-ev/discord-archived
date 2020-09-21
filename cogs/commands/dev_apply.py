@@ -11,7 +11,7 @@ from modules.permissions import is_bot_owner
 #                      '**Please use ``` wrapped around application**'
 
 applicationExample = getVal('/config/application', 'applicationExample')
-devRoleId = int(getVal('/config/roles', 'developer'))
+DEVROLEID = int(getVal('/config/roles', 'developer'))
 
 
 class DevApplyCommands(commands.Cog):
@@ -19,11 +19,11 @@ class DevApplyCommands(commands.Cog):
         self.bot = bot
 
     @commands.group(name='dev', invoke_without_command=True)
-    async def devcmd(self, ctx):
+    async def dev_cmd(self, ctx):
         await ctx.send(applicationExample)
         return
 
-    @devcmd.command(name='apply')
+    @dev_cmd.command(name='apply')
     async def dev_apply(self, ctx: Context, *, application):
         application = application.replace('`', '')
         lines = []
@@ -48,12 +48,12 @@ class DevApplyCommands(commands.Cog):
             await ctx.send('Your application is reviewing, please wait.')
         return
 
-    @devcmd.command(name="accept")
+    @dev_cmd.command(name="accept")
     @is_bot_owner()
-    async def devAccept(self, ctx: Context, userMentionOrId):
-        userid = int(userMentionOrId.replace('<@!', '').replace('>', ''))
+    async def dev_accept(self, ctx: Context, user_mention_or_id):
+        userid = int(user_mention_or_id.replace('<@!', '').replace('>', ''))
         guild = ctx.guild
-        role = guild.get_role(devRoleId)
+        role = guild.get_role(DEVROLEID)
         user = guild.get_member(userid)
         if role and user is not None:
             await user.add_roles(role)

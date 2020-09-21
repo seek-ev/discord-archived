@@ -1,0 +1,6 @@
+[MASTER]
+disable=C0114,C0115,C0116
+init-hook=
+    try: import pylint_venv
+    except ImportError: pass
+    else: pylint_venv.inithook()
