@@ -15,7 +15,7 @@ from modules.permissions import is_bot_owner
 #                      '**Please use ``` wrapped around application**'
 
 applicationExample = getVal('/config/application', 'applicationExample')
-DEVROLEID = int(getVal('/config/roles', 'developer'))
+DEVROLEID = int(getVal('/config/roles', 'developer/id'))
 
 
 class DevApplyCommands(commands.Cog):
@@ -30,7 +30,7 @@ class DevApplyCommands(commands.Cog):
     @dev_cmd.command(name='apply')
     async def dev_apply(self, ctx: Context, *, application):
         userid = ctx.author.id
-        if checkExist('/applications/developer', '{0}'.format(userid)):
+        if checkExist('/applications/developer', '{0}'.format(str(userid0)):
             await ctx.send('Your application is reviewing, please wait.')
             return
         application = application.replace('`', '')
@@ -49,8 +49,8 @@ class DevApplyCommands(commands.Cog):
             'username': username,
             'reason': lines[2].replace('reason: ', '', 1).split('#')[0],
         }
-        if not checkExist('/applications/developer', '{0}'.format(userid)):
-            setVal('/applications/developer', '{0}'.format(userid), application)
+        if not checkExist('/applications/developer', '{0}'.format(str(userid))):
+            setVal('/applications/developer', '{0}'.format(str(userid)), application)
         return
 
     @dev_cmd.command(name="accept")
