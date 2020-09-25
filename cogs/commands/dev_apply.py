@@ -30,7 +30,7 @@ class DevApplyCommands(commands.Cog):
     @dev_cmd.command(name='apply')
     async def dev_apply(self, ctx: Context, *, application):
         userid = ctx.author.id
-        if checkExist('/applications/developer', '{0}'.format(str(userid0)):
+        if checkExist('/applications/developer', '{0}'.format(str(userid))):
             await ctx.send('Your application is reviewing, please wait.')
             return
         application = application.replace('`', '')
