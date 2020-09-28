@@ -3,17 +3,22 @@ import firebase_admin
 from firebase_admin import db
 from firebase_admin import credentials
 
+from modules import config
+
 
 def initFirebase():
-    cred = credentials.Certificate(os.environ.get('firebase'))
-    firebase_admin.initialize_app(cred, {
-        'databaseURL': os.environ.get('firebase-database-url'),
-    })
+    cred = credentials.Certificate(config.get_firebase_sdk())
+    firebase_admin.initialize_app(
+        cred,
+        {
+            "databaseURL": config.get_firebase_database_url(),
+        },
+    )
 
 
-def getVal(path='/', child=''):
+def getVal(path="/", child=""):
     ref = db.reference(path)
-    if child != '':
+    if child != "":
         ch = ref.child(child)
         return ch.get()
     return ref.get()
@@ -25,7 +30,7 @@ def setVal(path, child, data):
     ch.set(data)
 
 
-def checkExist(path='/', child=''):
+def checkExist(path="/", child=""):
     check = getVal(path, child)
     if check is not None:
         return True
