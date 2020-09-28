@@ -7,7 +7,7 @@ cogs = ['cogs.commands.dev_apply',
         'cogs.events.command_event',
         'cogs.events.reaction_event']
 
-client = commands.Bot(owner_ids=config.getOwners(), case_insensitive=1, command_prefix="!")
+client = commands.Bot(owner_ids=config.getOwners(), case_insensitive=1, command_prefix=config.getPrefix())
 
 
 @client.event

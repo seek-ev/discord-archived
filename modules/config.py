@@ -8,6 +8,7 @@ api = os.getenv('api')
 owners_id = os.getenv('owners')
 firebasesdk = os.getenv('firebase')
 firebasedatabaseurl = os.getenv('firebase-database-url')
+prefix = os.getenv('prefix')
 
 
 def getToken():
@@ -33,3 +34,6 @@ def getFirebaseSDK():
 
 def getFirebaseDatabaseUrl():
     return firebasedatabaseurl
+
+def getPrefix():
+    return prefix
