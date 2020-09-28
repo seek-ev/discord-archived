@@ -1,7 +1,9 @@
-from modules.database import initFirebase, setVal
+from modules.database import initFirebase, setVal, checkExist
 
 initFirebase()
 # Generate example application
-setVal("/config/application", "applicationExample", "Example Application...")
+if not checkExist("/config/application", "applicationExample"):
+    setVal("/config/application", "applicationExample", "Example Application...")
 # Generate Developer Role fields
-setVal("/config/developer", "id", "role_id")
+if not checkExist("/config/developer", "id"):
+    setVal("/config/developer", "id", "role_id")
