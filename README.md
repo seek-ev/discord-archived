@@ -4,20 +4,46 @@
 
 Bot designed for [seek-ev](https://seek-ev.com/) community on discord.
 
-If you want to run it by yourself first you have to install [rust](https://www.rust-lang.org/tools/install).
+## Requirements:
 
-After installing rust build project:
+- [python 3](https://www.python.org/downloads/)
 
-```
-cargo build
-```
+## Running project:
 
-You will also need a bot token from [discord applications](https://discord.com/developers/applications). Create `.env` file and place token in it as `TOKEN=YOUR_TOKEN_HERE`.
-
-Now you can run this project by:
+### (Optional) First create virtual env:
 
 ```
-cargo run
+ python3 -m venv /path/to/new/virtual/environment
+```
+And enter to it.
+
+### Install required depedencies:
+
+```
+ pip install -r requirements.txt
+```
+
+### Set up .env file 
+
+```
+token=discord bot token
+prefix=pre-defined bot prefix
+owners=discord user ids for bot owners
+firebase=path to filebase key file
+firebase-database-url=url to firebase realtime database
+```
+
+### (First time) Create Database:
+
+```
+ python3 generate_database.py
+```
+
+
+### Run bot app:
+
+```
+ python3 main.py
 ```
 
 If you have any issues join our [discord](https://discord.gg/GQ4ddQM) community.
