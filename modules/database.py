@@ -30,6 +30,11 @@ def setVal(path, child, data):
     ch.set(data)
 
 
+def flushDatabase():
+    ref = db.reference("/")
+    ref.set({})
+
+
 def checkExist(path="/", child=""):
     check = getVal(path, child)
     if check is not None:
