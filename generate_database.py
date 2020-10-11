@@ -7,7 +7,8 @@ if not checkExist("/config/application", "applicationExample"):
     setVal("/config/application", "applicationExample", "Example Application...")
 # Generate Developer Role fields
 if not checkExist("/config/roles/developer", "id"):
-    setVal("/config/roles/developer", "id", "role_id")
+    setVal("/config/roles/dev", "developer", "role_id")
+    setVal("/config/roles/main", "developer", "role_id")
 # Generate Reaction Roles fields
 j = [
     {
@@ -24,3 +25,6 @@ if not checkExist("/config/", "reaction_roles"):
         "reaction_roles",
         j,
     )
+if not checkExist("/config", "guilds"):
+    setVal("/config/guilds", "main", "main_guild_id")
+    setVal("/config/guilds", "dev", "dev_guild_id")
