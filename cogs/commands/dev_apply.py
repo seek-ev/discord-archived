@@ -14,49 +14,49 @@ from modules.permissions import is_bot_owner
 #                      'reason: I love this project! # reason why do you want to join us (nullable)```' \
 #                      '**Please use ``` wrapped around application**'
 
-applicationExample = getVal('/config/application', 'applicationExample')
-DEVROLEID = int(getVal('/config/roles', 'developer/id'))
+applicationExample = getVal("/config/application", "applicationExample")
+DEVROLEID = int(getVal("/config/roles", "developer/id"))
 
 
 class DevApplyCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.group(name='dev', invoke_without_command=True)
+    @commands.group(name="dev", invoke_without_command=True)
     async def dev_cmd(self, ctx):
         await ctx.send(applicationExample)
         return
 
-    @dev_cmd.command(name='apply')
+    @dev_cmd.command(name="apply")
     async def dev_apply(self, ctx: Context, *, application):
         userid = ctx.author.id
-        if checkExist('/applications/developer', '{0}'.format(str(userid))):
-            await ctx.send('Your application is reviewing, please wait.')
+        if checkExist("/applications/developer", "{0}".format(str(userid))):
+            await ctx.send("Your application is reviewing, please wait.")
             return
-        application = application.replace('`', '')
+        application = application.replace("`", "")
         lines = []
         for line in application.splitlines():
-            if line != ' ' and line != '':
+            if line != " " and line != "":
                 lines.append(line)
         wherehelp = []
-        for v in lines[0].split(','):
-            v = v.split('#')[0]
-            v = v.replace('[', '').replace(']', '').replace(' ', '', 1)
+        for v in lines[0].split(","):
+            v = v.split("#")[0]
+            v = v.replace("[", "").replace("]", "").replace(" ", "", 1)
             wherehelp.append(v)
-        username = lines[1].replace('username: ', '', 1).split('#')[0].strip()
+        username = lines[1].replace("username: ", "", 1).split("#")[0].strip()
         application = {
-            'wherehelp': wherehelp,
-            'username': username,
-            'reason': lines[2].replace('reason: ', '', 1).split('#')[0],
+            "wherehelp": wherehelp,
+            "username": username,
+            "reason": lines[2].replace("reason: ", "", 1).split("#")[0],
         }
-        if not checkExist('/applications/developer', '{0}'.format(str(userid))):
-            setVal('/applications/developer', '{0}'.format(str(userid)), application)
+        if not checkExist("/applications/developer", "{0}".format(str(userid))):
+            setVal("/applications/developer", "{0}".format(str(userid)), application)
         return
 
     @dev_cmd.command(name="accept")
     @is_bot_owner()
     async def dev_accept(self, ctx: Context, user_mention_or_id):
-        userid = int(user_mention_or_id.replace('<@!', '').replace('>', ''))
+        userid = int(user_mention_or_id.replace("<@!", "").replace(">", ""))
         guild = ctx.guild
         role = guild.get_role(DEVROLEID)
         user = guild.get_member(userid)
@@ -67,14 +67,14 @@ class DevApplyCommands(commands.Cog):
     @dev_cmd.command(name="list")
     @is_bot_owner()
     async def dev_list(self, ctx: Context):
-        applications = getVal('/applications/developer')
+        applications = getVal("/applications/developer")
         message = json.dumps(applications, indent=1)
         if not len(message) > 1950:
-            message = '```json\n' + json.dumps(applications, indent=1) + '```'
+            message = "```json\n" + json.dumps(applications, indent=1) + "```"
             await ctx.send(message)
         else:
             f_msg = io.StringIO(message)
-            f: discord.File = discord.File(fp=f_msg, filename='applications.json')
+            f: discord.File = discord.File(fp=f_msg, filename="applications.json")
             await ctx.send(file=f)
         return
 
