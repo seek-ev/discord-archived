@@ -67,16 +67,21 @@ class DevApplyCommands(commands.Cog):
     @dev_cmd.command(name="list")
     @is_bot_owner()
     async def dev_list(self, ctx: Context):
+        await ctx.trigger_typing()
+
         applications = getVal("/applications/developer")
-        message = json.dumps(applications, indent=1)
-        if not len(message) > 1950:
-            message = "```json\n" + json.dumps(applications, indent=1) + "```"
-            await ctx.send(message)
-        else:
-            f_msg = io.StringIO(message)
-            f: discord.File = discord.File(fp=f_msg, filename="applications.json")
-            await ctx.send(file=f)
-        return
+        embed = discord.Embed(title="Applications")
+
+        for user_id, i in applications.items():
+            user = await ctx.bot.fetch_user(user_id)
+
+            embed.add_field(
+                name=f"**{str(user)} ({i['username']})**",
+                value=f"**Help with**: {', '.join(i['wherehelp'])}\n**Reason**: {i['reason']}",
+                inline=False,
+            )
+
+        return await ctx.send(embed=embed)
 
 
 def setup(bot):
