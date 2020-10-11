@@ -7,23 +7,17 @@ Bot designed for [seek-ev](https://seek-ev.com/) community on discord.
 ## Requirements:
 
 - [python 3](https://www.python.org/downloads/)
+- [pipenv](https://pipenv.pypa.io/en/latest/)
 
 ## Running project:
-
-### (Optional) First create virtual env:
-
-```
- python3 -m venv /path/to/new/virtual/environment
-```
-And enter to it.
 
 ### Install required depedencies:
 
 ```
- pip install -r requirements.txt
+pipenv install --python 3.8
 ```
 
-### Set up .env file 
+### Set up .env file
 
 ```
 token=discord bot token
@@ -36,14 +30,13 @@ firebase-database-url=url to firebase realtime database
 ### (First time) Create Database:
 
 ```
- python3 generate_database.py
+pipenv run python generate_database.py
 ```
-
 
 ### Run bot app:
 
 ```
- python3 main.py
+pipenv run start
 ```
 
 If you have any issues join our [discord](https://discord.gg/GQ4ddQM) community.
