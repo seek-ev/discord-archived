@@ -7,6 +7,7 @@ cogs = [
     "cogs.commands.dev_apply",
     "cogs.events.command_event",
     "cogs.events.reaction_event",
+    "cogs.events.join_event",
 ]
 
 client = commands.Bot(

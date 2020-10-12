@@ -15,7 +15,7 @@ from modules.permissions import is_bot_owner
 #                      '**Please use ``` wrapped around application**'
 
 applicationExample = getVal("/config/application", "applicationExample")
-DEVROLEID = int(getVal("/config/roles", "developer/id"))
+DEVROLEID = int(getVal("/config/roles", "dev/developer"))
 
 
 class DevApplyCommands(commands.Cog):
@@ -28,14 +28,23 @@ class DevApplyCommands(commands.Cog):
         return
 
     @dev_cmd.command(name="apply")
-    async def dev_apply(self, ctx: Context, *, application):
+    async def dev_apply(self, ctx: Context, *, application_text):
         userid = ctx.author.id
         if checkExist("/applications/developer", "{0}".format(str(userid))):
-            await ctx.send("Your application is reviewing, please wait.")
-            return
-        application = application.replace("`", "")
+            application = getVal("/applications/developer", "{0}".format(str(userid)))
+
+            if application["status"] == "pending":
+                return await ctx.send(
+                    "Your application is being reviewed, please wait."
+                )
+            elif application["status"] == "banned":
+                return await ctx.send("You cannot apply.")
+            elif application["status"] == "accepted":
+                return await ctx.send("You have already been accepted.")
+
+        application_text = application_text.replace("`", "")
         lines = []
-        for line in application.splitlines():
+        for line in application_text.splitlines():
             if line != " " and line != "":
                 lines.append(line)
         wherehelp = []
@@ -44,39 +53,57 @@ class DevApplyCommands(commands.Cog):
             v = v.replace("[", "").replace("]", "").replace(" ", "", 1)
             wherehelp.append(v)
         username = lines[1].replace("username: ", "", 1).split("#")[0].strip()
+
         application = {
             "wherehelp": wherehelp,
             "username": username,
             "reason": lines[2].replace("reason: ", "", 1).split("#")[0],
+            "status": "pending",
+            "try": 1 if not application else application["try"] + 1,
         }
-        if not checkExist("/applications/developer", "{0}".format(str(userid))):
-            setVal("/applications/developer", "{0}".format(str(userid)), application)
+
+        setVal("/applications/developer", "{0}".format(str(userid)), application)
         return
 
     @dev_cmd.command(name="accept")
     @is_bot_owner()
-    async def dev_accept(self, ctx: Context, user_mention_or_id):
-        userid = int(user_mention_or_id.replace("<@!", "").replace(">", ""))
-        guild = ctx.guild
-        role = guild.get_role(DEVROLEID)
-        user = guild.get_member(userid)
-        if role and user is not None:
-            await user.add_roles(role)
+    async def dev_accept(self, ctx: Context, user: discord.User):
+        status = getVal(f"/applications/developer/{user.id}", "status")
+        if status == "accepted":
+            return await ctx.send("This user has already been accepted")
+        setVal(f"/applications/developer/{user.id}", "status", "accepted")
+
+        dev_guild = self.bot.get_guild(int(getVal("/config/guilds", "dev")))
+        default_channel = dev_guild.get_channel(764854987217567765)
+        invite = await default_channel.create_invite(
+            max_uses=1, reason=f"User application for {user} accepted"
+        )
+
+        await user.send(
+            f"Your application has been accepted. "
+            f"Please join the dev server: {str(invite)}"
+        )
+
         return
 
     @dev_cmd.command(name="list")
     @is_bot_owner()
     async def dev_list(self, ctx: Context):
+        await ctx.trigger_typing()
+
         applications = getVal("/applications/developer")
-        message = json.dumps(applications, indent=1)
-        if not len(message) > 1950:
-            message = "```json\n" + json.dumps(applications, indent=1) + "```"
-            await ctx.send(message)
-        else:
-            f_msg = io.StringIO(message)
-            f: discord.File = discord.File(fp=f_msg, filename="applications.json")
-            await ctx.send(file=f)
-        return
+        embed = discord.Embed(title="Applications")
+
+        for user_id, i in applications.items():
+            user = await ctx.bot.fetch_user(user_id)
+
+            embed.add_field(
+                name=f"**{str(user)} ({i['username']})**",
+                value=f"**Help with**: {', '.join(i['wherehelp'])}\n**Reason**: {i['reason']}",
+                inline=False,
+            )
+
+        return await ctx.send(embed=embed)
 
 
 def setup(bot):
