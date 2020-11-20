@@ -7,9 +7,9 @@
   "author": "seek-ev",
   "license": "ISC",
   "scripts": {
-    "dev": "cross-env NODE_ENV=dev nodemon --exec babel-node ./src/index.js",
+    "dev": "nodemon --exec babel-node ./src/index.js",
     "build": "babel src -d build",
-    "prod": "cross-env NODE_ENV=prod node ./build/index.js"
+    "start": "node ./build/index.js"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
