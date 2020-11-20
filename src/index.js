@@ -8,7 +8,6 @@ const client = new Discord.Client()
 
 // Express client
 const app = express()
-const PORT = 3000
 app.use(bodyParser.json())
 
 // Commands
@@ -36,8 +35,8 @@ client.on('ready', () => {
 
 client.on('message', msg => commands(msg, client))
 
-app.listen(PORT, () => {
-    console.log(`API ready and listening on port ${PORT}`)
+app.listen(process.env.PORT || 3000, () => {
+    console.log(`API ready and listening on port ${process.env.PORT || 3000}`)
 })
 
 client.login(process.env.BOT_TOKEN)
