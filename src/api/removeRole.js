@@ -11,7 +11,7 @@ export const removeRole = async (req, res, client) => {
 
     if (foundMember.roles.cache.some(role => role.id === process.env.DISCORD_ROLE)) {
         try {
-            await foundMember.roles.remove(process.env.DISCORD_ROLE, `${foundMember.user.username} disconnected his/hers discord to Seek EV`)
+            await foundMember.roles.remove(process.env.DISCORD_ROLE, `${foundMember.user.username} disconnected his/hers discord from Seek EV`)
         } catch (err) {
             return res.status(500).json({ error: err })
         }
