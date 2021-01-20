@@ -1,7 +1,7 @@
 export const addRole = async (req, res, client) => {
     const { userId } = req.body
 
-    if (!userId) return res.status(400).json({ error: { message: 'Missing userId in body' } })
+    if (!userId) return res.status(400).json({ error: { message: 'Missing userId in request body' } })
 
     const guild = await client.guilds.fetch(process.env.GUILD_ID)
 
@@ -12,7 +12,7 @@ export const addRole = async (req, res, client) => {
     if (foundMember.roles.cache.some(role => role.id === process.env.DISCORD_ROLE)) return res.status(200).send()
 
     try {
-        await foundMember.roles.add(process.env.DISCORD_ROLE, 'Connected discord to seek account')
+        await foundMember.roles.add(process.env.DISCORD_ROLE, `${foundMember.user.username} connected his/hers discord to Seek EV`)
     } catch (err) {
         return res.status(500).json({ error: err })
     }

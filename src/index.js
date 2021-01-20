@@ -14,7 +14,8 @@ app.use(bodyParser.json())
 import { commands } from './commands/index'
 
 // API
-import { addRole } from './api/role'
+import { addRole } from './api/addRole'
+import { removeRole } from './api/removeRole'
 
 // Middleware
 import { checkToken } from './middleware/checkToken'
@@ -28,6 +29,8 @@ app.get('/', (req, res) => {
 })
 
 app.post('/', [checkToken], (req, res) => addRole(req, res, client))
+
+app.delete('/', [checkToken], (req, res) => removeRole(req, res, client))
 
 client.on('ready', () => {
     console.log('Bot ready and running')
