@@ -30,7 +30,7 @@ app.get('/', (req, res) => {
 
 app.post('/', [checkToken], (req, res) => addRole(req, res, client))
 
-app.delete('/', [checkToken], (req, res) => removeRole(req, res, client))
+app.post('/remove', [checkToken], (req, res) => removeRole(req, res, client))
 
 client.on('ready', () => {
     console.log('Bot ready and running')
